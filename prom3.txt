@@ -1,0 +1,4 @@
+  - job_name: 'webapp'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['node1Ip:9100']

@@ -1,0 +1,88 @@
+pipeline{
+	agent any
+	tools{
+		jdk 'jdk17'
+		nodejs 'node16'
+}
+	environment {
+		SCANNER_HOME=tool 'sonar-scanner'
+}
+	stages {
+		stage('clean workspace'){
+			steps{
+			cleanWs()
+				}
+		}
+		stage('Checkout from Git'){
+			steps{
+				git branch: 'main', url: 'https://github.com/chang9906/DevSecOps-Jenkins.git'
+				}
+		}
+		stage("Sonarqube Analysis "){
+			steps{
+				withSonarQubeEnv('sonar-server') {
+					sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=webapp \
+					-Dsonar.projectKey=webapp '''
+						}
+				}
+		}
+		stage("quality gate"){
+			steps {
+				script {
+					waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+						}
+				}
+		}
+		stage('Install Dependencies') {
+			steps {
+				sh "npm install"
+				}
+		}
+		stage('OWASP FS SCAN') {
+			steps {
+				dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+				dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+				}
+		}
+		stage('TRIVY FS SCAN') {
+			steps {
+				sh "trivy fs . > trivyfs.txt"
+				}
+		}
+		stage("Docker Build & Push"){
+			steps{
+				script{
+					withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+						sh "docker build webapp ."
+						sh "docker tag webapp changjun99/webapp:latest "
+						sh "docker push changjun99/webapp:latest "
+								}
+						}
+				}
+		}
+		stage("TRIVY"){
+			steps{
+				sh "trivy image changjun99/webapp:latest' > trivyimage.txt"
+				}
+		}
+		stage('Deploy to container'){
+			steps{
+				sh 'docker run -d webapp -p 8081:80 changjun99/webapp:latest'
+								}
+						}
+				}
+		}
+		post {
+		success {
+			mail to: 'your_email@example.com',
+				subject: "Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+				body: "Good news! The build was successful. Check it out at ${env.BUILD_URL}."
+		}
+		failure {
+			mail to: 'your_email@example.com',
+				subject: "Build FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+				body: "Unfortunately, the build failed. Please review the logs at ${env.BUILD_URL} and address any issues."
+		}
+				
+	}
+}
