@@ -356,19 +356,19 @@ Triggers: `원하는 알림 기능 설정`
 
 `Kubernetes 폴더 내 yml파일 참고`
 
-## Step 16. Prometheus Community Helm Repository 추가
+## Step 17. Prometheus Community Helm Repository 추가
 
 `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
 
-## Step 17. Node Exporter의 Namespace 생성
+## Step 18. Node Exporter의 Namespace 생성
 
 `kubectl create namespace prometheus-node-exporter
 
-## Step 18. Helm을 활용해 Node Exporter 설치
+## Step 19. Helm을 활용해 Node Exporter 설치
 
 `helm install prometheus-node-exporter prometheus-community/prometheus-node-exporter --namespace prometheus-node-exporter`
 
-## Step 19. Prometheus Configuration 업데이트 (Scraping Metrics from node)
+## Step 20. Prometheus Configuration 업데이트 (Scraping Metrics from node)
 
 `prom3.txt` 참고
 
@@ -376,7 +376,7 @@ Reload Prometheus
 
 `curl -X POST http://localhost:9090/-/reload`
 
-## Step 20. ArgoCD Server 배포
+## Step 21. ArgoCD Server 배포
 
 해당 커맨드 이후, LoadBalancer가 생성될때까지 3분정도 기다려야합니다
 
@@ -392,7 +392,7 @@ ArgoCD Paswword 확인
 
 `echo $ARGO_PWD`
 
-## Step 21. ArgoCD Application 생성
+## Step 22. ArgoCD Application 생성
 ArgoCD 대시보드에서 git repo 연결
 
 Create ArgoCD Application 
