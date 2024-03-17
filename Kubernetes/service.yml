@@ -5,7 +5,7 @@ metadata:
   labels:
     app: webapp
 spec:
-  type: NodePort
+  type: NodePort #로드밸런스 원할경우 LoadBalancer 로 변경
   ports:
   - port: 80
     targetPort: 80
