@@ -352,6 +352,10 @@ Triggers: `원하는 알림 기능 설정`
 
 ## Step 15. Helm 설치 
 
+## Step 16. K8s yaml 파일 구성
+
+`Kubernetes 폴더 내 yml파일 참고`
+
 ## Step 16. Prometheus Community Helm Repository 추가
 
 `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
