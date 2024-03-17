@@ -3,6 +3,8 @@ Jenkins를 활용해 웹서버를 자동으로 배포하는 DevSecOps 프로젝�
 
 Dev, Sec, Ops 등 3단계로 나뉘어져있습니다.
 
+![Project Outline](/architecture.png)
+
 # Dev
 ## Step1. AWS EC2 인스턴스 배포
 Ubuntu 22.04 버전의 AWS t2.large EC2 인스턴스를 실행하고
